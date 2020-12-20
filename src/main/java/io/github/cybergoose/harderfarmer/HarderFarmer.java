@@ -7,12 +7,17 @@ public final class HarderFarmer extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        // Plugin startup logic
+        loadConfig();
         this.getServer().getConsoleSender().sendMessage(ChatColor.GREEN + this.getServer().getName() + " is enabled.");
     }
 
     @Override
     public void onDisable() {
-        // Plugin shutdown logic
+        this.getServer().getConsoleSender().sendMessage(ChatColor.RED + this.getServer().getName() + " is disabled.");
+    }
+
+    public void loadConfig(){
+        this.getConfig().getDefaultSection();
+        this.getServer().broadcastMessage(ChatColor.GREEN + "is working....");
     }
 }
