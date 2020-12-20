@@ -1,0 +1,7 @@
+name: HarderFarmer
+version: ${project.version}
+main: io.github.cybergoose.harderfarmer.HarderFarmer
+api-version: 1.16
+authors: [ CyberGoose ]
+description: Minecraft Plugin for harding farming and skill leveling to become a better farmer with perks.
+website: https://www.cybergoose.github.io/PortfolioII
