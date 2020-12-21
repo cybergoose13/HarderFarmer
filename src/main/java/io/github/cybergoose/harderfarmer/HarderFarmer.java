@@ -1,5 +1,6 @@
 package io.github.cybergoose.harderfarmer;
 
+import io.github.cybergoose.harderfarmer.handlers.WheatDrop;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -8,6 +9,7 @@ public final class HarderFarmer extends JavaPlugin {
     @Override
     public void onEnable() {
         loadConfig();
+        this.getServer().getPluginManager().registerEvents(new WheatDrop(), this);
         this.getServer().getConsoleSender().sendMessage(ChatColor.GREEN + this.getServer().getName() + " is enabled.");
     }
 
@@ -17,7 +19,7 @@ public final class HarderFarmer extends JavaPlugin {
     }
 
     public void loadConfig(){
-        this.getConfig().getDefaultSection();
-        this.getServer().broadcastMessage(ChatColor.GREEN + "is working....");
+        this.getConfig().options().copyDefaults(true);
+        this.saveConfig();
     }
 }
