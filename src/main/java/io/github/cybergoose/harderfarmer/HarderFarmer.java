@@ -1,6 +1,7 @@
 package io.github.cybergoose.harderfarmer;
 
 import io.github.cybergoose.harderfarmer.handlers.WheatDrop;
+import io.github.cybergoose.harderfarmer.managers.ConfigManager;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -20,6 +21,7 @@ public final class HarderFarmer extends JavaPlugin {
 
     public void loadConfig(){
         this.getConfig().options().copyDefaults(true);
+        new ConfigManager(this, "test");
         this.saveConfig();
     }
 }
