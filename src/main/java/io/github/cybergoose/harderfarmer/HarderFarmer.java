@@ -1,3 +1,13 @@
+/*
+*
+* Title:    HarderFarmer(name subject to change)
+* Author:   CyberGoose
+* Start:    2020-12-18
+* Update:   2020-12-23
+* Version:  1.0
+*
+* */
+
 package io.github.cybergoose.harderfarmer;
 
 import io.github.cybergoose.harderfarmer.handlers.WheatDrop;
@@ -21,7 +31,8 @@ public final class HarderFarmer extends JavaPlugin {
 
     public void loadConfig(){
         this.getConfig().options().copyDefaults(true);
-        new ConfigManager(this, "test");
+        ConfigManager configManager= new ConfigManager(this, "test");
+        configManager.write("test", "Player.Skills.Farming", "50");
         this.saveConfig();
     }
 }
