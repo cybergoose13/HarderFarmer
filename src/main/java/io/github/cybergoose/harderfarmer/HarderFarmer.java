@@ -32,7 +32,7 @@ public final class HarderFarmer extends JavaPlugin {
     public void loadConfig(){
         this.getConfig().options().copyDefaults(true);
         ConfigManager configManager= new ConfigManager(this, "test");
-        configManager.write("test", "Player.Skills.Farming", "50");
+
         this.saveConfig();
     }
 }

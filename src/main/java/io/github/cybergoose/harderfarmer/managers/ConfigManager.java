@@ -1,47 +1,81 @@
 package io.github.cybergoose.harderfarmer.managers;
 
 import org.bukkit.plugin.java.JavaPlugin;
+import sun.nio.cs.UTF_8;
 
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 public class ConfigManager {
 
     private final JavaPlugin PLUGIN;
+    private final File FILE;
+    private FileOutputStream fos;
 
     public ConfigManager(JavaPlugin PLUGIN, String filePath){
         this.PLUGIN= PLUGIN;
-        createConfigFile(filePath);
+        String EXT = ".yml";
+        this.FILE= new File(PLUGIN.getDataFolder() + File.separator + filePath + EXT);
+        createConfigFile();
     }
 
-    public void writeBoolean(){
-
-    }
-
-    public void writeInt(String filePath, String path, int value){
+    @SuppressWarnings("unused")
+    public void writeBoolean(String path, boolean value){
         try{
-            File file= new File(PLUGIN.getDataFolder() + File.separator + filePath + "yml");
-            writePath(file, path);
+            fos= new FileOutputStream(FILE,true);
+            writePath(path);
+            DataOutputStream dos= new DataOutputStream(fos);
+            dos.writeBoolean(value);
+            dos.close();
+            fos.close();
         }catch (IOException e){
             e.printStackTrace();
         }
-
     }
 
-    public void writeLong(){
+    @SuppressWarnings("unused")
+    public void writeInt(String path, int value){
+        try{
+            fos= new FileOutputStream(FILE, true);
+            writePath(path);
+            DataOutputStream dos= new DataOutputStream(fos);
+            dos.writeInt(value);
+            dos.close();
+            fos.close();
 
+        }catch (IOException e){
+            e.printStackTrace();
+        }
     }
 
+    @SuppressWarnings("unused")
     public void writeDouble(){
 
     }
 
+    @SuppressWarnings("unused")
     public void writeString(){
 
     }
 
-    public void write(String filePath, String path, String value){
+    @SuppressWarnings("unused")
+    public void addComment(String ...comments){
+        try{
+            fos= new FileOutputStream(FILE, true);
+            for(String comment : comments){
+                byte[] bytes= ("#\t" + comment + "\n").getBytes(StandardCharsets.UTF_8);
+                fos.write(bytes);
+            }
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    private void write(String filePath, String path, String value){
         try{
             File file= new File(PLUGIN.getDataFolder() + File.separator + filePath + ".yml");
             String[] paths= path.split("\\.");
@@ -67,9 +101,8 @@ public class ConfigManager {
         }
     }
 
-    private void writePath(File file, String path) throws IOException{
+    private void writePath(String path) throws IOException{
         String[] paths= path.split("\\.");
-        FileOutputStream fos= new FileOutputStream(file, true);
         String tabs= "";
 
         if(paths.length > 1){
@@ -90,13 +123,12 @@ public class ConfigManager {
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
-    private void createConfigFile(String filePath){
-        File file= new File(PLUGIN.getDataFolder() + File.separator + filePath + ".yml");
-        if(!file.exists()){
+    private void createConfigFile(){
+        if(!FILE.exists()){
             try{
-                file.createNewFile();
-                FileOutputStream fos= new FileOutputStream(file);
-                byte[] bytes= ("#\t" + file.getName() + " configuration file.\n").getBytes();
+                FILE.createNewFile();
+                fos= new FileOutputStream(FILE);
+                byte[] bytes= ("#\t" + FILE.getName() + " configuration file.\n").getBytes();
                 fos.write(bytes);
                 fos.close();
 
