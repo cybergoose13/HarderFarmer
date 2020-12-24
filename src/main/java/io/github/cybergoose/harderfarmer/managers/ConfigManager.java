@@ -1,13 +1,11 @@
 package io.github.cybergoose.harderfarmer.managers;
 
 import org.bukkit.plugin.java.JavaPlugin;
-import sun.nio.cs.UTF_8;
 
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
 public class ConfigManager {
@@ -21,7 +19,7 @@ public class ConfigManager {
         String EXT = ".yml";
         this.FILE= new File(PLUGIN.getDataFolder() + File.separator + filePath + EXT);
         createConfigFile();
-    }
+    }   // end of ConfigManager
 
     @SuppressWarnings("unused")
     public void writeBoolean(String path, boolean value){
@@ -53,13 +51,31 @@ public class ConfigManager {
     }
 
     @SuppressWarnings("unused")
-    public void writeDouble(){
-
+    public void writeDouble(String path, double value){
+        try{
+            fos= new FileOutputStream(FILE, true);
+            writePath(path);
+            DataOutputStream dos= new DataOutputStream(fos);
+            dos.writeDouble(value);
+            dos.close();
+            fos.close();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
     }
 
     @SuppressWarnings("unused")
-    public void writeString(){
-
+    public void writeString(String path, String value){
+        try{
+            fos= new FileOutputStream(FILE, true);
+            writePath(path);
+            DataOutputStream dos= new DataOutputStream(fos);
+            dos.writeChars(value);
+            dos.close();
+            fos.close();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
     }
 
     @SuppressWarnings("unused")
@@ -99,7 +115,7 @@ public class ConfigManager {
         }catch (IOException e){
             e.printStackTrace();
         }
-    }
+    }   //  write method will be deleted...
 
     private void writePath(String path) throws IOException{
         String[] paths= path.split("\\.");
