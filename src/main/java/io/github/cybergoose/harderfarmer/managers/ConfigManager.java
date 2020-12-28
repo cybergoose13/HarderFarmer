@@ -1,3 +1,14 @@
+/*
+ *
+ * Title:    HarderFarmer(name subject to change)
+ * Author:   CyberGoose
+ * Start:    2020-12-18
+ * Update:   2020-12-25
+ *
+ * STATUS:  UNUSED, INCOMPLETE
+ *
+ * */
+
 package io.github.cybergoose.harderfarmer.managers;
 
 import org.bukkit.plugin.java.JavaPlugin;
@@ -10,22 +21,20 @@ import java.nio.charset.StandardCharsets;
 
 public class ConfigManager {
 
-    private final JavaPlugin PLUGIN;
     private final File FILE;
     private FileOutputStream fos;
 
     public ConfigManager(JavaPlugin PLUGIN, String filePath){
-        this.PLUGIN= PLUGIN;
         String EXT = ".yml";
         this.FILE= new File(PLUGIN.getDataFolder() + File.separator + filePath + EXT);
         createConfigFile();
-    }   // end of ConfigManager
+    }   //  End of ConfigManager
 
     @SuppressWarnings("unused")
-    public void writeBoolean(String path, boolean value){
+    public void setBoolean(String path, boolean value){
         try{
             fos= new FileOutputStream(FILE,true);
-            writePath(path);
+            setPath(path);
             DataOutputStream dos= new DataOutputStream(fos);
             dos.writeBoolean(value);
             dos.close();
@@ -33,13 +42,13 @@ public class ConfigManager {
         }catch (IOException e){
             e.printStackTrace();
         }
-    }
+    }   //  End of setBoolean
 
     @SuppressWarnings("unused")
-    public void writeInt(String path, int value){
+    public void setInt(String path, int value){
         try{
             fos= new FileOutputStream(FILE, true);
-            writePath(path);
+            setPath(path);
             DataOutputStream dos= new DataOutputStream(fos);
             dos.writeInt(value);
             dos.close();
@@ -48,13 +57,13 @@ public class ConfigManager {
         }catch (IOException e){
             e.printStackTrace();
         }
-    }
+    }   //  End of setInt
 
     @SuppressWarnings("unused")
-    public void writeDouble(String path, double value){
+    public void setDouble(String path, double value){
         try{
             fos= new FileOutputStream(FILE, true);
-            writePath(path);
+            setPath(path);
             DataOutputStream dos= new DataOutputStream(fos);
             dos.writeDouble(value);
             dos.close();
@@ -62,13 +71,13 @@ public class ConfigManager {
         }catch (IOException e){
             e.printStackTrace();
         }
-    }
+    }   //  End of setDouble
 
     @SuppressWarnings("unused")
-    public void writeString(String path, String value){
+    public void setString(String path, String value){
         try{
             fos= new FileOutputStream(FILE, true);
-            writePath(path);
+            setPath(path);
             DataOutputStream dos= new DataOutputStream(fos);
             dos.writeChars(value);
             dos.close();
@@ -76,7 +85,21 @@ public class ConfigManager {
         }catch (IOException e){
             e.printStackTrace();
         }
-    }
+    }   //  End of setString
+
+    private void setPath(String path) throws IOException{
+        String[] paths= path.split("\\.");
+        String tabs= "";
+
+        if(paths.length > 1){
+            for(int i= 0; i  < paths.length-1; i++){
+                tabs= indent(i,"");
+                byte[] path_bytes= (tabs + paths[i] + ":\n").getBytes();
+                fos.write(path_bytes);
+            }
+            fos.write((tabs + "\t" + paths[paths.length -1] + ":").getBytes());
+        }else fos.write((path + ":").getBytes());
+    }   //  End of setPath
 
     @SuppressWarnings("unused")
     public void addComment(String ...comments){
@@ -89,54 +112,7 @@ public class ConfigManager {
         }catch (IOException e){
             e.printStackTrace();
         }
-    }
-
-    private void write(String filePath, String path, String value){
-        try{
-            File file= new File(PLUGIN.getDataFolder() + File.separator + filePath + ".yml");
-            String[] paths= path.split("\\.");
-            FileOutputStream fos= new FileOutputStream(file, true);
-            String tabs = "\t";
-
-            if(paths.length > 1){
-
-                for (int i= 0; i < paths.length -1; i++) {
-                    tabs= indent(i, "");
-                    byte[] path_bytes= (tabs + paths[i] + ":\n").getBytes();
-                    fos.write(path_bytes);
-                }
-                fos.write((tabs + "\t" + paths[paths.length -1] + ":").getBytes());
-            }else fos.write((path + ":").getBytes());
-
-            byte[] value_bytes= ("\t" + value + "\n").getBytes();
-            fos.write(value_bytes);
-            fos.close();
-
-        }catch (IOException e){
-            e.printStackTrace();
-        }
-    }   //  write method will be deleted...
-
-    private void writePath(String path) throws IOException{
-        String[] paths= path.split("\\.");
-        String tabs= "";
-
-        if(paths.length > 1){
-            for(int i= 0; i  < paths.length-1; i++){
-                tabs= indent(i,"");
-                byte[] path_bytes= (tabs + paths[i] + ":\n").getBytes();
-                fos.write(path_bytes);
-            }
-            fos.write((tabs + "\t" + paths[paths.length -1] + ":").getBytes());
-        }else fos.write((path + ":").getBytes());
-    }
-
-//    Super crazy recursion for multiple indents
-    private String indent(int loops, String indents){
-        if(loops == 0) return indents;
-        indents+= "\t";
-        return indent(loops-1, indents);
-    }
+    }   //  End of addComment
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
     private void createConfigFile(){
@@ -152,5 +128,13 @@ public class ConfigManager {
                 e.printStackTrace();
             }
         }
-    }
+    }   //  End of createConfigFile
+
+    //    Super crazy recursion for multiple indents
+    //    Possibly change to forloop
+    private String indent(int loops, String indents){
+        if(loops == 0) return indents;
+        indents+= "\t";
+        return indent(loops-1, indents);
+    }   //  End of indent
 }

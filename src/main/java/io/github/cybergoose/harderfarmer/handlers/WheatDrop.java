@@ -1,6 +1,7 @@
 package io.github.cybergoose.harderfarmer.handlers;
 
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -12,7 +13,10 @@ public class WheatDrop implements Listener {
 
     @EventHandler
     public void wheatDrop(BlockBreakEvent blockBreakEvent){
+
         Material material = blockBreakEvent.getBlock().getType();
+        Player player = blockBreakEvent.getPlayer();
+
         if(material == Material.WHEAT) {
             Collection<ItemStack> drops = blockBreakEvent.getBlock().getDrops();
             for( ItemStack item : drops){
