@@ -4,13 +4,12 @@ import org.bukkit.Material;
 
 public enum FarmingBlock {
     WHEAT(Material.WHEAT),
-    CARROT(Material.CARROT),
-    POTATO(Material.POTATO),
+    CARROT(Material.CARROTS),
+    POTATO(Material.POTATOES),
     PUMPKIN(Material.PUMPKIN),
     MELON(Material.MELON),
-    KELP(Material.KELP_PLANT),
-    BERRIES(Material.SWEET_BERRY_BUSH),
-    BEET(Material.BEETROOT);
+    BERRIES(Material.SWEET_BERRY_BUSH), //  only catches when broken
+    BEET(Material.BEETROOTS);
 
     public Material type;
 
@@ -18,4 +17,12 @@ public enum FarmingBlock {
         this.type= type;
     }
 
+    public static boolean contains(Material material){
+        for(FarmingBlock farmingBlock :  FarmingBlock.values()){
+            if(material == farmingBlock.type){
+                return true;
+            }
+        }
+        return false;
+    }
 }
