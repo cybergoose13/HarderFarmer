@@ -1,5 +1,7 @@
 package io.github.cybergoose.harderfarmer.managers;
 
+import io.github.cybergoose.harderfarmer.HarderFarmer;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -7,7 +9,7 @@ import java.sql.SQLException;
 
 public class DBManager {
 
-    private static Connection connection;
+    private Connection connection;
     private final String HOST;
     private final String DB;
     private final String USER;
@@ -20,19 +22,29 @@ public class DBManager {
         this.USER= user;
         this.PASS= pass;
         this.PORT= port;
+
+        try{
+            dbConnect();
+        }catch (SQLException exception){
+            exception.printStackTrace();
+        }
     }
 
 
-    public void dbConnect() throws SQLException {
-        if(!connection.isClosed() || connection != null){
+    private void dbConnect() throws SQLException {
+        if(connection != null && !connection.isClosed()){
             return;
         }
         connection = DriverManager
-                .getConnection("jdbc:mysql://"  + this.HOST + ":" + this.PORT + "/" + this.DB,
-                        this.USER, this.PASS);
+                .getConnection("jdbc:mysql://" +
+                                this.HOST + ":" +
+                                this.PORT + "/" +
+                                this.DB,
+                        this.USER,
+                        this.PASS);
     }
 
-    public static PreparedStatement statement(String query){
+    public PreparedStatement statement(String query){
         PreparedStatement ps= null;
         try{
             ps= connection.prepareStatement(query);

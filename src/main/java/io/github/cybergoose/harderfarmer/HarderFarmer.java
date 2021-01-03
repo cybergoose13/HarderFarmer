@@ -17,8 +17,11 @@ import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.sql.SQLException;
+import java.util.Objects;
 
 public class HarderFarmer extends JavaPlugin {
+
+    public static DBManager dbManager;
 
     @Override
     public void onEnable() {
@@ -36,19 +39,20 @@ public class HarderFarmer extends JavaPlugin {
     private void loadConfig(){
 
         this.getConfig().options().copyDefaults(true);
-        DBManager dbManager= new DBManager(
-                this.getConfig().getString("database.host"),
-                this.getConfig().getString("database.dbname"),
-                this.getConfig().getString("database.user"),
-                this.getConfig().getString("database.pswd"),
+        this.saveConfig();
+
+        dbManager= new DBManager(
+                Objects.requireNonNull((this.getConfig().getString("database.host"))),
+                Objects.requireNonNull(this.getConfig().getString("database.dbname")),
+                Objects.requireNonNull(this.getConfig().getString("database.user")),
+                Objects.requireNonNull(this.getConfig().getString("database.pswd")),
                 this.getConfig().getInt("database.port")
         );
 
-        try{
-            dbManager.dbConnect();
-        }catch (SQLException exception){
-            exception.printStackTrace();
-        }
-        this.saveConfig();
+//        try{
+//            dbManager.dbConnect();
+//        }catch (SQLException exception){
+//            exception.printStackTrace();
+//        }
     }
 }

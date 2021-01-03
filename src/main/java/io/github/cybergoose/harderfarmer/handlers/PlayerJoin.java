@@ -8,7 +8,6 @@
 
 package io.github.cybergoose.harderfarmer.handlers;
 
-import io.github.cybergoose.harderfarmer.HarderFarmer;
 import io.github.cybergoose.harderfarmer.interfaces.SkillInterface;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -25,12 +24,13 @@ public class PlayerJoin implements Listener, SkillInterface {
     public void onJoin(PlayerJoinEvent event){
         Player player= event.getPlayer();
         UUID uuid= player.getUniqueId();
+
         try{
             ResultSet resultSet=
-                    HarderFarmer.preparedStatement("SELECT * FROM skills WHERE UUID = '" + uuid + "';")
+                    dbManager.statement("SELECT * FROM skills WHERE UUID = '" + uuid + "';")
                             .executeQuery();
             if( !(resultSet.next()) ){
-                HarderFarmer.preparedStatement("INSERT INTO skills(UUID, NAME, FARMING) VALUES ('" +
+                dbManager.statement("INSERT INTO skills(UUID, NAME, FARMING) VALUES ('" +
                         uuid + "','" + player.getName() + "', DEFAULT);")
                         .executeUpdate();
             }else{
