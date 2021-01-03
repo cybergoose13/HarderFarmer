@@ -1,3 +1,11 @@
+/*
+ *
+ * Author:   CyberGoose
+ * Start:    2020-12-18
+ * Update:   2021-01-02
+ *
+ * */
+
 package io.github.cybergoose.harderfarmer.handlers;
 
 import io.github.cybergoose.harderfarmer.HarderFarmer;
