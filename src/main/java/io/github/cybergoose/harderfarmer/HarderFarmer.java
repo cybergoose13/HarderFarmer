@@ -11,22 +11,26 @@
 package io.github.cybergoose.harderfarmer;
 
 import io.github.cybergoose.harderfarmer.handlers.FarmingDrop;
+import io.github.cybergoose.harderfarmer.handlers.PlayerJoin;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public final class HarderFarmer extends JavaPlugin {
+public class HarderFarmer extends JavaPlugin {
 
-    private Connection connection;
+    private static Connection connection;
     private String host, database, username, password;
     private int port;
+
     @Override
     public void onEnable() {
         loadConfig();
         this.getServer().getPluginManager().registerEvents(new FarmingDrop(), this);
+        this.getServer().getPluginManager().registerEvents(new PlayerJoin(), this);
         this.getServer().getConsoleSender().sendMessage(ChatColor.GREEN + this.getServer().getName() + " is enabled.");
     }
 
@@ -45,20 +49,29 @@ public final class HarderFarmer extends JavaPlugin {
         this.port= this.getConfig().getInt("database.port");
 
         try{
-            dbconnect();
+            dbConnect();
         }catch (SQLException exception){
             exception.printStackTrace();
         }
         this.saveConfig();
     }
 
-    private void dbconnect() throws SQLException {
+    private void dbConnect() throws SQLException {
         if(connection != null && !connection.isClosed()){
             return;
         }
         connection = DriverManager.getConnection("jdbc:mysql://" + this.host + ":" +
                 this.port + "/" + this.database,
                 this.username, this.password);
-        this.getServer().getConsoleSender().sendMessage("Connection Successful");
+    }
+
+    public static PreparedStatement preparedStatement(String query){
+        PreparedStatement ps= null;
+        try{
+            ps= connection.prepareStatement(query);
+        }catch (SQLException exception){
+            exception.printStackTrace();
+        }
+        return ps;
     }
 }
